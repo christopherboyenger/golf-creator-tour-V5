@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --app-max-w: 430px;
+  --gct-ink: #071225;
+  --gct-navy: #0f1b2e;
+  --gct-navy-2: #162340;
+  --gct-navy-3: #1e2d4a;
+  --gct-gold: #c9a84c;
+  --gct-paper: #eef2f8;
+  --gct-paper-2: #f7f9fc;
+  --gct-line: #d5dbe6;
+  --gct-muted: #8b95a7;
+  --gct-text: #071a33;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --app-max-w: 480px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --app-max-w: 520px;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--gct-ink);
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(201, 168, 76, 0.14), transparent 32rem),
+    linear-gradient(180deg, #081326 0%, #0d1729 100%);
+  color: var(--gct-text);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+}
+
+.gct-app-frame {
+  width: 100%;
+  max-width: var(--app-max-w);
+  min-height: 100vh;
+  margin: 0 auto;
+  position: relative;
+  overflow-x: clip;
+  background: linear-gradient(180deg, var(--gct-navy) 0%, var(--gct-navy-2) 34%, #e9eef6 34%, #e9eef6 100%);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.gct-fixed {
+  width: 100%;
+  max-width: var(--app-max-w);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-safe-bottom {
+  padding-bottom: max(18px, calc(8px + env(safe-area-inset-bottom)));
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes gctFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gctSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes gctSheetUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 36px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes gctShimmer {
+  0% {
+    background-position: -180% 0;
+  }
+  100% {
+    background-position: 180% 0;
+  }
+}
+
+@keyframes gctSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gctPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
