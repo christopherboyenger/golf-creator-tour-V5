@@ -22,7 +22,7 @@ export function BottomNav() {
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
             <Link
-              className={`flex min-h-[54px] flex-col items-center justify-center gap-1 rounded-xl text-[11px] font-bold no-underline transition ${
+              className={`flex min-h-[54px] flex-col items-center justify-center gap-1 rounded-xl text-[10px] font-bold no-underline transition ${
                 active ? "text-[#071a33]" : "text-[#9aa4b5]"
               }`}
               href={item.href}

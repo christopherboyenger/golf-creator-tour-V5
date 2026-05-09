@@ -24,6 +24,12 @@ const config: Config = {
       boxShadow: {
         sheet: "0 24px 80px rgba(7, 18, 37, 0.35)",
         lift: "0 12px 34px rgba(7, 18, 37, 0.16)"
+      },
+      opacity: {
+        35: "0.35",
+        45: "0.45",
+        55: "0.55",
+        65: "0.65"
       }
     }
   },

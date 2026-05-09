@@ -14,6 +14,8 @@ import {
   X
 } from "lucide-react";
 import { useState } from "react";
+import { ConfirmationDialog } from "@/components/confirmation-dialog";
+import { toast } from "@/components/toast";
 
 type SettingsDrawerProps = {
   isAdmin: boolean;
@@ -64,13 +66,13 @@ export function SettingsDrawer({ isAdmin, isOpen, onClose, onOpenUpgrade }: Sett
         onClick={onClose}
         type="button"
       />
-      <aside className="gct-fixed fixed inset-y-0 z-[60] overflow-y-auto bg-white text-[#071a33] shadow-sheet">
-        <div className="flex min-h-full flex-col px-6 pb-6 pt-16">
-          <header className="flex items-center justify-between border-b border-[#d7dde8] pb-7">
-            <h2 className="text-2xl font-black">Menu</h2>
+      <aside className="gct-fixed fixed inset-y-0 z-[60] overflow-y-auto bg-white text-[#071a33] shadow-sheet animate-[gctSlideIn_0.24s_ease_both]">
+        <div className="flex min-h-full flex-col px-6 pb-6 pt-[max(66px,calc(env(safe-area-inset-top)+26px))]">
+          <header className="flex items-center justify-between border-b border-[#d7dde8] pb-5">
+            <h2 className="text-base font-black">Menu</h2>
             <button
               aria-label="Close menu"
-              className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e3e8f1] text-[#7c8798]"
+              className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e3e8f1] text-[#7c8798]"
               onClick={onClose}
               type="button"
             >
@@ -78,9 +80,9 @@ export function SettingsDrawer({ isAdmin, isOpen, onClose, onOpenUpgrade }: Sett
             </button>
           </header>
 
-          <div className="mt-6 grid gap-3">
+          <div className="mt-5 grid gap-2.5">
             <button
-              className="flex min-h-[82px] items-center gap-4 rounded-2xl bg-[#13233f] px-5 text-left text-white shadow-lift"
+              className="tap-row flex min-h-[82px] items-center gap-4 rounded-2xl bg-[#13233f] px-5 text-left text-white shadow-lift"
               onClick={onOpenUpgrade}
               type="button"
             >
@@ -98,7 +100,7 @@ export function SettingsDrawer({ isAdmin, isOpen, onClose, onOpenUpgrade }: Sett
               const Icon = item.icon;
               return (
                 <Link
-                  className="flex min-h-[82px] items-center gap-4 rounded-2xl border border-[#d7dde8] bg-[#e4e9f2] px-5 text-left no-underline"
+                className="tap-row flex min-h-[82px] items-center gap-4 rounded-2xl border border-[#d7dde8] bg-[#e4e9f2] px-5 text-left no-underline"
                   href={item.href}
                   key={item.href}
                   onClick={onClose}
@@ -117,7 +119,7 @@ export function SettingsDrawer({ isAdmin, isOpen, onClose, onOpenUpgrade }: Sett
 
             {isAdmin && (
               <Link
-                className="flex min-h-[82px] items-center gap-4 rounded-2xl bg-[#13233f] px-5 text-left text-white no-underline shadow-lift"
+                className="tap-row flex min-h-[82px] items-center gap-4 rounded-2xl bg-[#13233f] px-5 text-left text-white no-underline shadow-lift"
                 href="/admin"
                 onClick={onClose}
               >
@@ -134,42 +136,33 @@ export function SettingsDrawer({ isAdmin, isOpen, onClose, onOpenUpgrade }: Sett
           </div>
 
           <div className="mt-auto border-t border-[#d7dde8] pt-5">
-            {confirmLogout ? (
-              <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-center">
-                <p className="text-sm font-black text-[#071a33]">Log out of Golf Creator Tour?</p>
-                <div className="mt-4 grid grid-cols-2 gap-3">
-                  <button
-                    className="rounded-xl border border-[#d7dde8] bg-white py-3 text-sm font-black text-[#6d7789]"
-                    onClick={() => setConfirmLogout(false)}
-                    type="button"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="rounded-xl bg-red-500 py-3 text-sm font-black text-white"
-                    onClick={() => setConfirmLogout(false)}
-                    type="button"
-                  >
-                    Yes, Log Out
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <button
-                className="flex min-h-[58px] w-full items-center justify-center gap-2 rounded-2xl border border-red-200 bg-red-50 text-base font-black text-red-500"
-                onClick={() => setConfirmLogout(true)}
-                type="button"
-              >
-                <LogOut size={18} />
-                Log Out
-              </button>
-            )}
+            <button
+              className="flex min-h-[58px] w-full items-center justify-center gap-2 rounded-2xl border border-red-200 bg-red-50 text-base font-black text-red-500"
+              onClick={() => setConfirmLogout(true)}
+              type="button"
+            >
+              <LogOut size={18} />
+              Log Out
+            </button>
             <p className="mt-6 text-center text-xs font-semibold text-[#9aa4b5]">
-              The Golf Creator Tour - v5.0 scaffold
+              The Golf Creator Tour - v5.0
             </p>
           </div>
         </div>
       </aside>
+      <ConfirmationDialog
+        body="Phase 2 keeps this as a UI-only confirmation. Auth wiring comes later."
+        confirmLabel="Log Out"
+        destructive
+        isOpen={confirmLogout}
+        onCancel={() => setConfirmLogout(false)}
+        onConfirm={() => {
+          setConfirmLogout(false);
+          onClose();
+          toast.info("Logout action reserved for the auth phase.");
+        }}
+        title="Log out of GCT?"
+      />
     </>
   );
 }

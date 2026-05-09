@@ -20,9 +20,9 @@ export function AppHeader({
   onNotificationsOpen
 }: AppHeaderProps) {
   return (
-    <header className="relative bg-[linear-gradient(180deg,#0f1b2e_0%,#162340_100%)] px-6 pb-3 pt-12 text-white">
-      <div className="relative flex min-h-[92px] items-center justify-center">
-        <div className="absolute left-0 top-1/2 flex -translate-y-1/2 items-center gap-3">
+    <header className="relative bg-[linear-gradient(180deg,#0f1b2e_0%,#162340_100%)] px-6 pb-2 pt-[max(52px,calc(env(safe-area-inset-top)+22px))] text-white">
+      <div className="relative flex min-h-[78px] items-center justify-center">
+        <div className="absolute left-0 top-1/2 flex -translate-y-1/2 items-center gap-2">
           <HeaderButton
             badge={unreadNotifications}
             label="Open notifications"
@@ -63,13 +63,13 @@ function HeaderButton({
   return (
     <button
       aria-label={label}
-      className="relative flex h-[54px] w-[54px] items-center justify-center rounded-2xl border border-white/5 bg-white/[0.065] text-white/65 shadow-[0_8px_22px_rgba(0,0,0,0.08)] transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/60"
+      className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-white/5 bg-white/[0.065] text-white/65 shadow-[0_8px_22px_rgba(0,0,0,0.08)] transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/60"
       onClick={onClick}
       type="button"
     >
       {children}
       {!!badge && (
-        <span className="absolute -right-1 -top-1 flex h-6 min-w-6 items-center justify-center rounded-full border-2 border-[#0f1b2e] bg-red-500 px-1 text-xs font-black text-white">
+        <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-[#0f1b2e] bg-red-500 px-1 text-[10px] font-black text-white">
           {badge > 9 ? "9+" : badge}
         </span>
       )}

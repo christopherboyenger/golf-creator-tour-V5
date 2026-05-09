@@ -42,9 +42,7 @@ body {
   min-height: 100%;
   margin: 0;
   overflow-x: hidden;
-  background:
-    radial-gradient(circle at 50% -20%, rgba(201, 168, 76, 0.14), transparent 32rem),
-    linear-gradient(180deg, #081326 0%, #0d1729 100%);
+  background: linear-gradient(180deg, #081326 0%, #0d1729 100%);
   color: var(--gct-text);
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -73,7 +71,7 @@ a {
   margin: 0 auto;
   position: relative;
   overflow-x: clip;
-  background: linear-gradient(180deg, var(--gct-navy) 0%, var(--gct-navy-2) 34%, #e9eef6 34%, #e9eef6 100%);
+  background: var(--gct-navy);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
@@ -95,6 +93,30 @@ a {
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.hide-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.tap-row {
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.tap-row:active {
+  opacity: 0.74;
+  transform: scale(0.985);
 }
 
 @keyframes gctFadeUp {

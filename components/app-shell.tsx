@@ -7,7 +7,9 @@ import { AppHeader } from "@/components/app-header";
 import { BottomNav } from "@/components/bottom-nav";
 import { NotificationPanel } from "@/components/notification-panel";
 import { SettingsDrawer } from "@/components/settings-drawer";
+import { Toaster } from "@/components/toast";
 import { UpgradeMembershipSheet } from "@/components/upgrade-membership-sheet";
+import { notifications } from "@/lib/mock-data";
 
 export function AppShell({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -22,8 +24,8 @@ export function AppShell({ children }: { children: ReactNode }) {
           onMenuOpen={() => setSettingsOpen(true)}
           onMessagesOpen={() => router.push("/messages")}
           onNotificationsOpen={() => setNotificationsOpen(true)}
-          unreadMessages={0}
-          unreadNotifications={1}
+          unreadMessages={1}
+          unreadNotifications={notifications.filter((item) => !item.read).length}
         />
         <main>{children}</main>
         <BottomNav />
@@ -39,6 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           }}
         />
         <UpgradeMembershipSheet isOpen={upgradeOpen} onClose={() => setUpgradeOpen(false)} />
+        <Toaster />
       </div>
     </div>
   );

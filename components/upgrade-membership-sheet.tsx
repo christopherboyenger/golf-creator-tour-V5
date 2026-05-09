@@ -2,6 +2,7 @@
 
 import { Check, Crown, X } from "lucide-react";
 import { useState } from "react";
+import { toast } from "@/components/toast";
 
 type UpgradeMembershipSheetProps = {
   isOpen: boolean;
@@ -87,15 +88,22 @@ export function UpgradeMembershipSheet({ isOpen, onClose }: UpgradeMembershipShe
         </div>
 
         <section className="mt-5 rounded-2xl border border-[#c9a84c]/35 bg-[linear-gradient(135deg,#2d2602,#161108)] p-4">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-md border border-red-500/35 bg-red-500/10 px-3 py-1">
+            <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+            <span className="text-[8px] font-black uppercase tracking-[0.18em] text-red-300">Limited - 100 only</span>
+          </div>
           <div className="flex items-center gap-4">
             <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#c9a84c] text-[#071225]">
               <Crown size={28} />
             </div>
             <div>
               <p className="text-base font-black text-[#d5b64f]">Founding Member</p>
-              <p className="mt-1 text-xs text-white/70">Limited 1 of 100 Elite Annual positioning.</p>
+              <p className="mt-1 text-xs text-white/70">1 of 100 Elite Annual positioning.</p>
             </div>
           </div>
+          <p className="mt-3 text-xs leading-5 text-white/60">
+            Gold Founding Member Card placement, early access, and 2x streak positioning are mocked in this phase.
+          </p>
         </section>
 
         <div className="mt-4 grid gap-3">
@@ -120,6 +128,7 @@ export function UpgradeMembershipSheet({ isOpen, onClose }: UpgradeMembershipShe
                   plan.tier === "Standard" ? "border border-[#d7dde8] bg-white text-[#7b8596]" : "bg-[#c9a84c] text-[#071225]"
                 }`}
                 disabled={plan.tier === "Standard"}
+                onClick={() => toast.info(`${plan.tier} checkout is reserved for the Stripe phase.`)}
                 type="button"
               >
                 {plan.cta}
