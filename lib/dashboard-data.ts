@@ -212,6 +212,7 @@ function mapCreator(creator: CreatorRow): Creator {
     countryCode: countryCode(creator.country),
     tier,
     rank: rankValue,
+    gender: creator.gender ?? null,
     points,
     followers: formatCompactNumber(totalFollowers),
     memberNumber: creator.member_number || "GCT-2026",
@@ -369,7 +370,7 @@ async function getLeaderboardRows(
     .from("creators")
     .select(
       `
-      id, auth_user_id, member_number, name, handle, country, state, city,
+      id, auth_user_id, member_number, name, handle, country, state, city, gender,
       tier, is_exempt, exempt_rank, founder_type, avatar_url, bio,
       status, role, current_streak, total_followers,
       creator_season_stats (
@@ -425,7 +426,7 @@ async function getChallengeParticipants(
       `
       id, challenge_id, creator_id, status,
       creator:creators!challenge_participations_creator_id_fkey (
-        id, member_number, name, handle, country, state, city, tier,
+        id, member_number, name, handle, country, state, city, gender, tier,
         is_exempt, exempt_rank, founder_type, avatar_url, bio,
         current_streak, total_followers,
         social_connections (platform, handle, followers, connected)

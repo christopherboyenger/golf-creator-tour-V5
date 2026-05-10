@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { ChallengeCard } from "@/components/challenge-card";
 import { ChallengeDetailSheet } from "@/components/challenge-detail-sheet";
+import { CompeteDashboard } from "@/components/compete-dashboard";
 import { CreatorAvatar, CreatorCard, PlatformIcon } from "@/components/creator-card";
 import { CreatorProfileSheet } from "@/components/creator-profile-sheet";
 import { EmptyState } from "@/components/empty-state";
@@ -591,77 +592,6 @@ function platformLabel(platform: (typeof profileSocials)[number]) {
   if (platform === "youtube") return "YouTube";
   if (platform === "tiktok") return "TikTok";
   return "Instagram";
-}
-
-function CompeteDashboard({ data }: { data: DashboardSnapshot }) {
-  const [selectedCreator, setSelectedCreator] = useState<Creator | null>(null);
-  const podium = data.creators.slice(0, 3);
-
-  if (data.loadError) {
-    return <DashboardLoadState body={data.loadError} title="Leaderboard unavailable" />;
-  }
-
-  return (
-    <>
-      <HeroShell
-        eyebrow="Leaderboard"
-        icon={<Trophy size={22} />}
-        subtitle={`${data.seasonLabel} - ${data.creators.length} Creators`}
-        title="Leaderboard"
-        stats={data.competeStats}
-      >
-        {podium.length > 0 ? <div className="mt-8 grid grid-cols-3 items-end gap-2">
-          {podium.map((creator, index) => {
-            const center = index === 1;
-            return (
-              <button
-                className="tap-row flex flex-col items-center text-center"
-                key={creator.id}
-                onClick={() => setSelectedCreator(creator)}
-                type="button"
-              >
-                <CreatorAvatar creator={creator} size={center ? "lg" : "md"} />
-                <p className="mt-3 max-w-[7rem] text-sm font-black leading-4">{creator.name}</p>
-                <p className="mt-1 text-xs font-semibold text-white/45">@{creator.handle}</p>
-                <p className="mt-2 text-[10px] font-black text-[#c9a84c]">Champion Exemption</p>
-                <div
-                  className={`mt-2 flex w-14 flex-col items-center justify-start rounded-t-xl border border-white/10 bg-white/10 pt-3 ${
-                    center ? "h-24" : "h-16"
-                  }`}
-                >
-                  <span className="text-xl font-black text-[#c9a84c]">{creator.rank}</span>
-                  <span className="mt-2 text-[10px] font-bold text-white/45">{creator.points}</span>
-                </div>
-              </button>
-            );
-          })}
-        </div> : null}
-      </HeroShell>
-
-      <section className="min-h-[50vh] rounded-t-[28px] bg-[#e9eef6] px-3 pb-28 pt-4 text-[#071a33]">
-        <div className="mb-3 flex items-center justify-between px-1">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#9aa4b5]">Full leaderboard</p>
-            <h2 className="mt-1 text-lg font-black">Creator rankings</h2>
-          </div>
-          <span className="rounded-full border border-[#d7dde8] bg-white px-3 py-1 text-[10px] font-black text-[#8b95a7]">
-            Live
-          </span>
-        </div>
-        {data.creators.length > 0 ? (
-          <div className="grid gap-2.5">
-            {data.creators.map((creator) => (
-              <CreatorCard creator={creator} key={creator.id} onSelect={setSelectedCreator} />
-            ))}
-          </div>
-        ) : (
-          <EmptyState body="Creator rankings will appear when the active season has competitors." icon={Trophy} title="No ranked creators yet" />
-        )}
-      </section>
-
-      <CreatorProfileSheet creator={selectedCreator} isOpen={!!selectedCreator} onClose={() => setSelectedCreator(null)} />
-    </>
-  );
 }
 
 function CreateDashboard({ data }: { data: DashboardSnapshot }) {
