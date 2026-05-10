@@ -17,7 +17,7 @@ import { ModalSheet } from "@/components/modal-sheet";
 import { StatCard } from "@/components/stat-card";
 import { toast } from "@/components/toast";
 import { TourCard } from "@/components/tour-card";
-import type { Creator } from "@/lib/mock-data";
+import type { Creator } from "@/lib/dashboard-types";
 
 type CreatorProfileSheetProps = {
   creator: Creator | null;

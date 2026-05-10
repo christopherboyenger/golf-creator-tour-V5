@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronRight, Instagram, MessageCircle, Trophy, Youtube } from "lucide-react";
-import type { Creator, SocialPlatform } from "@/lib/mock-data";
+import type { Creator, SocialPlatform } from "@/lib/dashboard-types";
 
 type CreatorCardProps = {
   creator: Creator;

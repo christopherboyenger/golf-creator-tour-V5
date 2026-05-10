@@ -6,7 +6,7 @@ import { ConfirmationDialog } from "@/components/confirmation-dialog";
 import { CreatorAvatar } from "@/components/creator-card";
 import { ModalSheet } from "@/components/modal-sheet";
 import { toast } from "@/components/toast";
-import type { Challenge } from "@/lib/mock-data";
+import type { Challenge } from "@/lib/dashboard-types";
 
 type ChallengeDetailSheetProps = {
   challenge: Challenge | null;
@@ -49,7 +49,7 @@ export function ChallengeDetailSheet({ challenge, isOpen, onClose, onUpgrade }: 
   }
 
   const needsUpgrade = challenge.tier === "Elite";
-  const closed = challenge.status === "Coming Soon";
+  const closed = challenge.status === "Coming Soon" || challenge.status === "Closed";
   const spotsLeft = challenge.spots > 0 ? challenge.spots - challenge.filled : null;
 
   return (
@@ -157,7 +157,7 @@ export function ChallengeDetailSheet({ challenge, isOpen, onClose, onUpgrade }: 
               </div>
               <div>
                 <p className="text-sm font-black text-[#071a33]">Elite plan required</p>
-                <p className="mt-1 text-xs leading-5 text-[#7b8596]">Upgrade access is mocked for Phase 2.</p>
+                <p className="mt-1 text-xs leading-5 text-[#7b8596]">Upgrade access connects during the Stripe phase.</p>
               </div>
             </div>
           )}
@@ -169,12 +169,12 @@ export function ChallengeDetailSheet({ challenge, isOpen, onClose, onUpgrade }: 
                 disabled
                 type="button"
               >
-                Coming Soon
+                {challenge.status}
               </button>
             ) : submitted ? (
               <button
                 className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/10 text-sm font-black text-emerald-700"
-                onClick={() => toast.success("Submission review state is mocked for Phase 2.")}
+                onClick={() => toast.success("Submission is waiting for review.")}
                 type="button"
               >
                 <Check size={16} />
@@ -185,8 +185,7 @@ export function ChallengeDetailSheet({ challenge, isOpen, onClose, onUpgrade }: 
                 <button
                   className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#0f1b2e] text-sm font-black text-white"
                   onClick={() => {
-                    setSubmitted(true);
-                    toast.success("Mock submission marked as ready for review.");
+                    toast.success("Submission flow is reserved for the challenge workflow phase.");
                   }}
                   type="button"
                 >
@@ -215,7 +214,7 @@ export function ChallengeDetailSheet({ challenge, isOpen, onClose, onUpgrade }: 
                 className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#0f1b2e] text-sm font-black text-white"
                 onClick={() => {
                   setJoined(true);
-                  toast.success(`Joined ${challenge.title} with mock data.`);
+                  toast.info(`${challenge.title} enrollment will be persisted in the challenge workflow phase.`);
                 }}
                 type="button"
               >
@@ -228,7 +227,7 @@ export function ChallengeDetailSheet({ challenge, isOpen, onClose, onUpgrade }: 
       </ModalSheet>
 
       <ConfirmationDialog
-        body="This only changes the local mock state in Phase 2."
+        body="This clears the local enrollment preview until challenge actions are fully wired."
         confirmLabel="Drop"
         destructive
         isOpen={confirmDrop}
@@ -237,7 +236,7 @@ export function ChallengeDetailSheet({ challenge, isOpen, onClose, onUpgrade }: 
           setJoined(false);
           setSubmitted(false);
           setConfirmDrop(false);
-          toast.info("Mock challenge spot released.");
+          toast.info("Challenge spot released in this preview.");
         }}
         title="Drop this challenge?"
       />

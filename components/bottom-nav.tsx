@@ -12,7 +12,7 @@ const navItems = [
 ];
 
 export function BottomNav() {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
 
   return (
     <nav className="gct-fixed nav-safe-bottom fixed bottom-0 z-40 border-t border-[#dce1eb] bg-white px-5 pt-2 shadow-[0_-10px_28px_rgba(7,18,37,0.08)]">

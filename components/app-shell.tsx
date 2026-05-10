@@ -9,13 +9,29 @@ import { NotificationPanel } from "@/components/notification-panel";
 import { SettingsDrawer } from "@/components/settings-drawer";
 import { Toaster } from "@/components/toast";
 import { UpgradeMembershipSheet } from "@/components/upgrade-membership-sheet";
-import { notifications } from "@/lib/mock-data";
+import { createClient } from "@/lib/supabase/client";
+import { emptyDashboardShellSnapshot, type DashboardShellSnapshot } from "@/lib/dashboard-types";
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({
+  children,
+  shell = emptyDashboardShellSnapshot
+}: {
+  children: ReactNode;
+  shell?: DashboardShellSnapshot;
+}) {
   const router = useRouter();
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await createClient().auth.signOut();
+    } finally {
+      router.push("/auth");
+      router.refresh();
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -24,17 +40,18 @@ export function AppShell({ children }: { children: ReactNode }) {
           onMenuOpen={() => setSettingsOpen(true)}
           onMessagesOpen={() => router.push("/messages")}
           onNotificationsOpen={() => setNotificationsOpen(true)}
-          unreadMessages={1}
-          unreadNotifications={notifications.filter((item) => !item.read).length}
+          unreadMessages={shell.unreadMessages}
+          unreadNotifications={shell.unreadNotifications}
         />
         <main>{children}</main>
         <BottomNav />
 
-        <NotificationPanel isOpen={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
+        <NotificationPanel items={shell.notifications} isOpen={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
         <SettingsDrawer
-          isAdmin
+          isAdmin={shell.isAdmin}
           isOpen={settingsOpen}
           onClose={() => setSettingsOpen(false)}
+          onLogout={handleLogout}
           onOpenUpgrade={() => {
             setSettingsOpen(false);
             setUpgradeOpen(true);

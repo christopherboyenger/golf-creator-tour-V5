@@ -1,14 +1,16 @@
 import type { PageConfig } from "@/lib/page-content";
-import { DashboardMockPage } from "@/components/dashboard-mock-pages";
+import { DashboardPage } from "@/components/dashboard-pages";
 import { GctMark } from "@/components/gct-mark";
 import { StatePreviewGrid, SuccessPill } from "@/components/state-preview";
+import type { DashboardSnapshot } from "@/lib/dashboard-types";
 
 type PlaceholderPageProps = {
+  data?: DashboardSnapshot;
   page: PageConfig;
 };
 
-export function DashboardPlaceholderPage({ page }: PlaceholderPageProps) {
-  return <DashboardMockPage route={page.route} />;
+export function DashboardPlaceholderPage({ data, page }: PlaceholderPageProps) {
+  return <DashboardPage data={data} route={page.route} />;
 }
 
 export function PublicPlaceholderPage({ page }: PlaceholderPageProps) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronRight, LockKeyhole, UsersRound } from "lucide-react";
-import type { Challenge } from "@/lib/mock-data";
+import type { Challenge } from "@/lib/dashboard-types";
 
 type ChallengeCardProps = {
   challenge: Challenge;

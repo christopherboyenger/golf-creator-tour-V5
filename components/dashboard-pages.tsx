@@ -27,42 +27,41 @@ import { TourCard } from "@/components/tour-card";
 import { UpgradeMembershipSheet } from "@/components/upgrade-membership-sheet";
 import { dashboardPages } from "@/lib/page-content";
 import type { PageConfig } from "@/lib/page-content";
-import {
-  challenges,
-  connectStats,
-  createStats,
-  creators,
-  currentCreator,
-  profileStats
-} from "@/lib/mock-data";
-import type { Challenge, Creator } from "@/lib/mock-data";
+import { emptyDashboardSnapshot, type Challenge, type Creator, type DashboardSnapshot } from "@/lib/dashboard-types";
 
-type DashboardMockPageProps = {
+type DashboardPageProps = {
+  data?: DashboardSnapshot;
   route: string;
 };
 
-export function DashboardMockPage({ route }: DashboardMockPageProps) {
+export function DashboardPage({ data = emptyDashboardSnapshot, route }: DashboardPageProps) {
   if (route === "/profile") {
-    return <ProfileDashboard />;
+    return <ProfileDashboard data={data} />;
   }
 
   if (route === "/compete") {
-    return <CompeteDashboard />;
+    return <CompeteDashboard data={data} />;
   }
 
   if (route === "/create") {
-    return <CreateDashboard />;
+    return <CreateDashboard data={data} />;
   }
 
   if (route === "/connect") {
-    return <ConnectDashboard />;
+    return <ConnectDashboard data={data} />;
   }
 
   const page = Object.values(dashboardPages).find((item) => item.route === route) ?? dashboardPages.home;
-  return <FallbackDashboard page={page} />;
+  return <FallbackDashboard data={data} page={page} />;
 }
 
-function ProfileDashboard() {
+function ProfileDashboard({ data }: { data: DashboardSnapshot }) {
+  const currentCreator = data.viewer;
+
+  if (data.loadError || !currentCreator) {
+    return <DashboardLoadState body={data.loadError || "Your creator profile is not available yet."} title="Profile unavailable" />;
+  }
+
   return (
     <>
       <section className="px-6 pb-8 pt-5 text-white">
@@ -90,7 +89,7 @@ function ProfileDashboard() {
 
       <section className="min-h-[58vh] rounded-t-[28px] bg-[#e9eef6] px-3 pb-28 pt-3 text-[#071a33]">
         <div className="grid grid-cols-3 gap-2 px-1">
-          {profileStats.map((stat) => (
+          {data.profileStats.map((stat) => (
             <StatCard
               detail={stat.label === "Points" ? "Tour total" : "Season"}
               key={stat.label}
@@ -113,7 +112,7 @@ function ProfileDashboard() {
         <div className="mt-3 grid grid-cols-2 overflow-hidden rounded-2xl border border-[#d7dde8] bg-[#dde3ed]">
           <button
             className="flex min-h-12 items-center justify-center gap-2 bg-[#edf2fa] text-sm font-black text-blue-500"
-            onClick={() => toast.info("Messages are mocked until backend wiring.")}
+            onClick={() => toast.info("Open Messages from the top bar to continue the conversation.")}
             type="button"
           >
             <MessageCircle size={15} />
@@ -121,7 +120,7 @@ function ProfileDashboard() {
           </button>
           <button
             className="flex min-h-12 items-center justify-center gap-2 text-sm font-black text-[#9aa4b5]"
-            onClick={() => toast.info("Match scoring stays UI-only in Phase 2.")}
+            onClick={() => toast.info("Match score submission is reserved for the match-play phase.")}
             type="button"
           >
             <Pencil size={15} />
@@ -138,7 +137,7 @@ function ProfileDashboard() {
           </div>
           <button
             className="rounded-xl bg-[#0f1b2e] px-4 py-2 text-xs font-black text-white"
-            onClick={() => toast.info("Profile editing is reserved for a later phase.")}
+            onClick={() => toast.info("Profile editing is reserved for the profile tools phase.")}
             type="button"
           >
             Edit
@@ -146,22 +145,58 @@ function ProfileDashboard() {
         </article>
 
         <SectionTitle title="Connected Platforms" />
-        <div className="overflow-hidden rounded-2xl border border-[#d7dde8] bg-white">
-          {currentCreator.socials.map((social, index) => (
-            <div
-              className={`flex min-h-[56px] items-center gap-3 px-4 py-3 ${
-                index < currentCreator.socials.length - 1 ? "border-b border-[#d7dde8]" : ""
-              }`}
-              key={social.platform}
-            >
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#eef2f8] text-[#0f1b2e]">
-                <PlatformIcon platform={social.platform} />
-              </span>
-              <span className="text-sm font-black">{social.followers}</span>
-              <span className="text-xs text-[#8b95a7]">{social.platform === "youtube" ? "subs" : "followers"}</span>
-            </div>
-          ))}
-        </div>
+        {currentCreator.socials.length > 0 ? (
+          <div className="overflow-hidden rounded-2xl border border-[#d7dde8] bg-white">
+            {currentCreator.socials.map((social, index) => (
+              <div
+                className={`flex min-h-[56px] items-center gap-3 px-4 py-3 ${
+                  index < currentCreator.socials.length - 1 ? "border-b border-[#d7dde8]" : ""
+                }`}
+                key={social.platform}
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#eef2f8] text-[#0f1b2e]">
+                  <PlatformIcon platform={social.platform} />
+                </span>
+                <span className="text-sm font-black">{social.followers}</span>
+                <span className="text-xs text-[#8b95a7]">{social.platform === "youtube" ? "subs" : "followers"}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState body="Connect a social platform during onboarding to start earning Tour Points." icon={WifiOff} title="No socials connected" />
+        )}
+
+        <SectionTitle title="Sponsors" />
+        {currentCreator.sponsors.length > 0 ? (
+          <div className="grid grid-cols-2 gap-2">
+            {currentCreator.sponsors.map((sponsor) => (
+              <div className="rounded-2xl border border-[#d7dde8] bg-white px-4 py-3 text-sm font-black" key={sponsor}>
+                {sponsor}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState body="Approved sponsors will appear on your public creator profile." icon={Shield} title="No sponsors yet" />
+        )}
+
+        <SectionTitle title="Golf Bag" />
+        {currentCreator.golfBag.length > 0 ? (
+          <div className="overflow-hidden rounded-2xl border border-[#d7dde8] bg-white">
+            {currentCreator.golfBag.map((item, index) => (
+              <div
+                className={`flex min-h-[52px] items-center gap-3 px-4 py-3 ${
+                  index < currentCreator.golfBag.length - 1 ? "border-b border-[#d7dde8]" : ""
+                }`}
+                key={item}
+              >
+                <Flag size={16} className="text-[#c9a84c]" />
+                <span className="text-sm font-bold">{item}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState body="Your clubs and equipment will appear here after they are added." icon={Flag} title="No golf bag items" />
+        )}
 
         <SectionTitle subtitle="Golf platform connections launching soon" title="Golf Platform Connections" />
         <div className="overflow-hidden rounded-2xl border border-[#d7dde8] bg-[#eef2f8]">
@@ -190,24 +225,24 @@ function ProfileDashboard() {
   );
 }
 
-function CompeteDashboard() {
+function CompeteDashboard({ data }: { data: DashboardSnapshot }) {
   const [selectedCreator, setSelectedCreator] = useState<Creator | null>(null);
-  const podium = [creators[1], creators[0], creators[2]];
+  const podium = data.creators.slice(0, 3);
+
+  if (data.loadError) {
+    return <DashboardLoadState body={data.loadError} title="Leaderboard unavailable" />;
+  }
 
   return (
     <>
       <HeroShell
         eyebrow="Leaderboard"
         icon={<Trophy size={22} />}
-        subtitle="Season 2026 - 100 Creators"
+        subtitle={`${data.seasonLabel} - ${data.creators.length} Creators`}
         title="Leaderboard"
-        stats={[
-          { label: "Your Rank", value: "#0", tone: "gold" },
-          { label: "Your Points", value: "0" },
-          { label: "Total", value: "100" }
-        ]}
+        stats={data.competeStats}
       >
-        <div className="mt-8 grid grid-cols-3 items-end gap-2">
+        {podium.length > 0 ? <div className="mt-8 grid grid-cols-3 items-end gap-2">
           {podium.map((creator, index) => {
             const center = index === 1;
             return (
@@ -232,7 +267,7 @@ function CompeteDashboard() {
               </button>
             );
           })}
-        </div>
+        </div> : null}
       </HeroShell>
 
       <section className="min-h-[50vh] rounded-t-[28px] bg-[#e9eef6] px-3 pb-28 pt-4 text-[#071a33]">
@@ -242,14 +277,18 @@ function CompeteDashboard() {
             <h2 className="mt-1 text-lg font-black">Creator rankings</h2>
           </div>
           <span className="rounded-full border border-[#d7dde8] bg-white px-3 py-1 text-[10px] font-black text-[#8b95a7]">
-            Mock
+            Live
           </span>
         </div>
-        <div className="grid gap-2.5">
-          {creators.map((creator) => (
-            <CreatorCard creator={creator} key={creator.id} onSelect={setSelectedCreator} />
-          ))}
-        </div>
+        {data.creators.length > 0 ? (
+          <div className="grid gap-2.5">
+            {data.creators.map((creator) => (
+              <CreatorCard creator={creator} key={creator.id} onSelect={setSelectedCreator} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState body="Creator rankings will appear when the active season has competitors." icon={Trophy} title="No ranked creators yet" />
+        )}
       </section>
 
       <CreatorProfileSheet creator={selectedCreator} isOpen={!!selectedCreator} onClose={() => setSelectedCreator(null)} />
@@ -257,18 +296,22 @@ function CompeteDashboard() {
   );
 }
 
-function CreateDashboard() {
+function CreateDashboard({ data }: { data: DashboardSnapshot }) {
   const [selectedChallenge, setSelectedChallenge] = useState<Challenge | null>(null);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
+
+  if (data.loadError) {
+    return <DashboardLoadState body={data.loadError} title="Challenges unavailable" />;
+  }
 
   return (
     <>
       <HeroShell
         eyebrow="Brand Challenges"
         icon={<Camera size={22} />}
-        subtitle="9 Active - 9 Total"
+        subtitle={`${data.challenges.filter((challenge) => challenge.status === "Open").length} Active - ${data.challenges.length} Total`}
         title="Brand Challenges"
-        stats={createStats}
+        stats={data.createStats}
       />
 
       <section className="min-h-[56vh] rounded-t-[28px] bg-[#e9eef6] px-3 pb-28 pt-4 text-[#071a33]">
@@ -284,17 +327,27 @@ function CreateDashboard() {
           ))}
         </div>
 
-        <div className="mt-4 grid gap-3">
-          {challenges.map((challenge) => (
-            <ChallengeCard challenge={challenge} key={challenge.id} onSelect={setSelectedChallenge} />
-          ))}
-        </div>
+        {data.challenges.length > 0 ? (
+          <div className="mt-4 grid gap-3">
+            {data.challenges.map((challenge) => (
+              <ChallengeCard challenge={challenge} key={challenge.id} onSelect={setSelectedChallenge} />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-4">
+            <EmptyState
+              body="Brand campaigns will appear here as admins publish them."
+              icon={CheckCircle2}
+              title="No challenges available"
+            />
+          </div>
+        )}
 
         <div className="mt-4">
           <EmptyState
-            body="Filters, backend availability, and admin-created campaigns will connect in later phases."
+            body="Filters and submission review are kept ready for the next challenge workflow pass."
             icon={CheckCircle2}
-            title="Challenge states reserved"
+            title="Challenge states connected"
           />
         </div>
       </section>
@@ -313,9 +366,13 @@ function CreateDashboard() {
   );
 }
 
-function ConnectDashboard() {
+function ConnectDashboard({ data }: { data: DashboardSnapshot }) {
   const [selectedCreator, setSelectedCreator] = useState<Creator | null>(null);
-  const nearby = creators.filter((creator) => creator.id !== currentCreator.id);
+  const nearby = data.nearbyCreators;
+
+  if (data.loadError) {
+    return <DashboardLoadState body={data.loadError} title="Connect unavailable" />;
+  }
 
   return (
     <>
@@ -324,7 +381,7 @@ function ConnectDashboard() {
         icon={<UsersRound size={22} />}
         subtitle="Find creators near you & challenge them"
         title="Connect"
-        stats={connectStats}
+        stats={data.connectStats}
       />
 
       <section className="min-h-[56vh] rounded-t-[28px] bg-[#e9eef6] px-3 pb-28 pt-4 text-[#071a33]">
@@ -340,11 +397,17 @@ function ConnectDashboard() {
           ))}
         </div>
 
-        <div className="mt-4 grid gap-2.5">
-          {nearby.map((creator) => (
-            <CreatorCard creator={creator} key={creator.id} onSelect={setSelectedCreator} variant="match" />
-          ))}
-        </div>
+        {nearby.length > 0 ? (
+          <div className="mt-4 grid gap-2.5">
+            {nearby.map((creator) => (
+              <CreatorCard creator={creator} key={creator.id} onSelect={setSelectedCreator} variant="match" />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-4">
+            <EmptyState body="Active creators will appear here as the season roster fills in." icon={UsersRound} title="No creators found nearby" />
+          </div>
+        )}
 
         <div className="mt-4 grid gap-3">
           <EmptyState
@@ -360,7 +423,7 @@ function ConnectDashboard() {
   );
 }
 
-function FallbackDashboard({ page }: { page: PageConfig }) {
+function FallbackDashboard({ data, page }: { data: DashboardSnapshot; page: PageConfig }) {
   const Icon = page.icon;
 
   return (
@@ -374,13 +437,34 @@ function FallbackDashboard({ page }: { page: PageConfig }) {
       />
       <section className="min-h-[56vh] rounded-t-[28px] bg-[#e9eef6] px-3 pb-28 pt-4 text-[#071a33]">
         <div className="grid gap-3">
-          <EmptyState body={page.emptyTitle} icon={WifiOff} title={page.route} />
+          <EmptyState body={data.loadError || page.emptyTitle} icon={WifiOff} title={page.route} />
           <LoadingSkeleton rows={2} />
           <div className="grid grid-cols-2 gap-2">
-            <StatCard label="State" value="Mock" detail="Phase 2" />
+            <StatCard label="State" value="Live" detail="Phase 5" />
             <StatCard label="Route" value="Ready" detail="Shared UI" tone="gold" />
           </div>
         </div>
+      </section>
+    </>
+  );
+}
+
+function DashboardLoadState({ body, title }: { body: string; title: string }) {
+  return (
+    <>
+      <HeroShell
+        eyebrow="Dashboard"
+        icon={<WifiOff size={22} />}
+        stats={[
+          { label: "Points", value: "0", tone: "gold" },
+          { label: "Routes", value: "4" },
+          { label: "State", value: "Hold" }
+        ]}
+        subtitle="The mobile shell is ready, but live Tour data could not load."
+        title={title}
+      />
+      <section className="min-h-[56vh] rounded-t-[28px] bg-[#e9eef6] px-3 pb-28 pt-4 text-[#071a33]">
+        <EmptyState body={body} icon={WifiOff} title={title} />
       </section>
     </>
   );
