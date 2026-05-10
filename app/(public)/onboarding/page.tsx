@@ -1,6 +1,5 @@
-import { PublicPlaceholderPage } from "@/components/page-scaffold";
-import { publicPages } from "@/lib/page-content";
+import { OnboardingExperience } from "@/components/auth/onboarding-page";
 
 export default function OnboardingPage() {
-  return <PublicPlaceholderPage page={publicPages.onboarding} />;
+  return <OnboardingExperience />;
 }

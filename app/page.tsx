@@ -1,5 +1,15 @@
 import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 
-export default function RootPage() {
-  redirect("/profile");
+export default async function RootPage() {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    redirect("/auth");
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  redirect(user ? "/profile" : "/auth");
 }

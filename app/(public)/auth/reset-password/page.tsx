@@ -1,6 +1,5 @@
-import { PublicPlaceholderPage } from "@/components/page-scaffold";
-import { publicPages } from "@/lib/page-content";
+import { ResetPasswordExperience } from "@/components/auth/reset-password-page";
 
 export default function ResetPasswordPage() {
-  return <PublicPlaceholderPage page={publicPages.resetPassword} />;
+  return <ResetPasswordExperience />;
 }

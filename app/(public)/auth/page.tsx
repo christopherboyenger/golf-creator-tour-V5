@@ -1,6 +1,5 @@
-import { PublicPlaceholderPage } from "@/components/page-scaffold";
-import { publicPages } from "@/lib/page-content";
+import { AuthExperience } from "@/components/auth/auth-page";
 
 export default function AuthPage() {
-  return <PublicPlaceholderPage page={publicPages.auth} />;
+  return <AuthExperience />;
 }

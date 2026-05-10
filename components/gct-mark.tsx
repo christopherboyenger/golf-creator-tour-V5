@@ -1,4 +1,5 @@
 import Image from "next/image";
+import gctIconLogo from "../logo-gct-icon.png.png";
 
 type GctMarkProps = {
   size?: "sm" | "md" | "lg";
@@ -16,10 +17,11 @@ export function GctMark({ size = "md", label = "Golf Creator Tour" }: GctMarkPro
     <span className={`inline-flex items-center justify-center ${sizes[size]}`} aria-label={label}>
       <Image
         alt=""
-        className="h-full w-full object-contain"
+        className="h-full w-full scale-[1.35] object-contain"
         height={112}
         priority
-        src="/gct-icon.png"
+        src={gctIconLogo}
+        unoptimized
         width={112}
       />
     </span>
