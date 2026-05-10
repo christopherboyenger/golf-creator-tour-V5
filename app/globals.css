@@ -130,6 +130,27 @@ a {
   }
 }
 
+@keyframes gctLogoReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes gctGlowPulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 35px rgba(201, 168, 76, 0.08));
+  }
+  50% {
+    filter: drop-shadow(0 0 60px rgba(201, 168, 76, 0.16));
+  }
+}
+
 @keyframes gctSlideIn {
   from {
     opacity: 0;

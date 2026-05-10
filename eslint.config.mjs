@@ -18,7 +18,8 @@ const eslintConfig = [
       "next-env.d.ts",
       "node_modules/**",
       ".codex-reference-old/**",
-      ".codex-reference-screenshots/**"
+      ".codex-reference-screenshots/**",
+      ".codex-video-deps/**"
     ]
   },
   ...compat.extends("next/core-web-vitals", "next/typescript")

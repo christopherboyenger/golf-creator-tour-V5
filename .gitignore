@@ -36,6 +36,9 @@ npm-version.*
 # local reference material used by Codex
 .codex-reference-old/
 .codex-reference-screenshots/
+.codex-gitdir-test-*/
+.codex-video-deps/
+.codex-video-frames/
 .codex-dev-server.cmd
 .codex-verify/
 .chrome-gct/
