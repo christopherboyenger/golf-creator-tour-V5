@@ -1,0 +1,14 @@
+-- Drop the stray text-arg overload of public.get_creator_auth_status.
+--
+-- Background: a duplicate get_creator_auth_status(p_auth_user_id text)
+-- overload was added to the database out-of-band, alongside the original
+-- uuid-arg version from 014_auth_rpcs.sql. With both overloads present,
+-- PostgREST returned HTTP 300 (Multiple Choices) for every call to
+--   /rest/v1/rpc/get_creator_auth_status
+-- because the JSON body's string p_auth_user_id matched both signatures.
+-- That broke /api/auth/status, which surfaces in the UI as
+-- "Server error — please try again in a moment." after sign-in.
+--
+-- auth.users.id and creators.auth_user_id are both uuid, so the uuid
+-- overload is the correct one. This migration removes the duplicate.
+DROP FUNCTION IF EXISTS public.get_creator_auth_status(text);
