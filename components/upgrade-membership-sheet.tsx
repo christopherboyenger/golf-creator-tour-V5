@@ -102,7 +102,7 @@ export function UpgradeMembershipSheet({ isOpen, onClose }: UpgradeMembershipShe
             </div>
           </div>
           <p className="mt-3 text-xs leading-5 text-white/60">
-            Gold Founding Member Card placement, early access, and 2x streak positioning are mocked in this phase.
+            Gold Founding Member Card placement, early access, and 2x streak positioning connect with the Stripe phase.
           </p>
         </section>
 

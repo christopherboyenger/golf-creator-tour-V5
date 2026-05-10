@@ -2,11 +2,11 @@
 
 import { Award, Bell, CheckCircle2, ChevronRight, Swords, Trophy, X, Zap } from "lucide-react";
 import { EmptyState } from "@/components/empty-state";
-import { notifications } from "@/lib/mock-data";
-import type { NotificationItem } from "@/lib/mock-data";
+import type { NotificationItem } from "@/lib/dashboard-types";
 
 type NotificationPanelProps = {
   isOpen: boolean;
+  items: NotificationItem[];
   onClose: () => void;
 };
 
@@ -26,7 +26,7 @@ const toneByType = {
   system: "text-[#7b8596]"
 } satisfies Record<NotificationItem["type"], string>;
 
-export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
+export function NotificationPanel({ isOpen, items, onClose }: NotificationPanelProps) {
   if (!isOpen) {
     return null;
   }
@@ -53,10 +53,10 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
         </header>
 
         <div className="grid gap-2.5 px-4 py-4">
-          {notifications.length === 0 ? (
+          {items.length === 0 ? (
             <EmptyState body="Match requests and tour updates will appear here." icon={Bell} title="No notifications yet" />
           ) : (
-            notifications.map((notification, index) => (
+            items.map((notification, index) => (
               <NotificationRow index={index} key={notification.id} notification={notification} />
             ))
           )}

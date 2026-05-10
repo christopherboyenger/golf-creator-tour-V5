@@ -21,6 +21,7 @@ type SettingsDrawerProps = {
   isAdmin: boolean;
   isOpen: boolean;
   onClose: () => void;
+  onLogout: () => void;
   onOpenUpgrade: () => void;
 };
 
@@ -51,7 +52,7 @@ const drawerItems = [
   }
 ];
 
-export function SettingsDrawer({ isAdmin, isOpen, onClose, onOpenUpgrade }: SettingsDrawerProps) {
+export function SettingsDrawer({ isAdmin, isOpen, onClose, onLogout, onOpenUpgrade }: SettingsDrawerProps) {
   const [confirmLogout, setConfirmLogout] = useState(false);
 
   if (!isOpen) {
@@ -151,7 +152,7 @@ export function SettingsDrawer({ isAdmin, isOpen, onClose, onOpenUpgrade }: Sett
         </div>
       </aside>
       <ConfirmationDialog
-        body="Phase 2 keeps this as a UI-only confirmation. Auth wiring comes later."
+        body="You will need to sign in again with your approved Tour account."
         confirmLabel="Log Out"
         destructive
         isOpen={confirmLogout}
@@ -159,7 +160,8 @@ export function SettingsDrawer({ isAdmin, isOpen, onClose, onOpenUpgrade }: Sett
         onConfirm={() => {
           setConfirmLogout(false);
           onClose();
-          toast.info("Logout action reserved for the auth phase.");
+          toast.info("Signed out of GCT.");
+          onLogout();
         }}
         title="Log out of GCT?"
       />

@@ -15,9 +15,12 @@ screenshots, and docs are reference material only.
 - Placeholder settings drawer, notifications panel, and upgrade sheet
 - Placeholder routes for all required app pages
 - Supabase migration history and typed client helpers
+- Phase 5 dashboard query layer for profile, leaderboard, challenges,
+  notifications, match counts, and app-shell session actions
 
-Phase 3 has started with the Supabase schema foundation. The UI still uses
-mock data until the auth and query layers are wired in later phases.
+Phase 5 is underway: auth and onboarding are wired to Supabase, and the core
+dashboard shell now reads live Supabase rows with explicit loading, empty, and
+error states where production actions are still being rebuilt.
 
 ## Local Setup
 
@@ -36,5 +39,5 @@ npm run build
 
 ## Environment
 
-Copy `.env.example` to `.env.local` when backend wiring begins. Do not place
-service role keys in client-exposed variables.
+Copy `.env.example` to `.env.local` for backend wiring. Do not place service
+role keys in client-exposed variables.

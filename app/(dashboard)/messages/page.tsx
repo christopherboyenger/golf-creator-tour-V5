@@ -1,6 +1,9 @@
 import { DashboardPlaceholderPage } from "@/components/page-scaffold";
+import { getDashboardSnapshot } from "@/lib/dashboard-data";
 import { dashboardPages } from "@/lib/page-content";
 
-export default function MessagesPage() {
-  return <DashboardPlaceholderPage page={dashboardPages.messages} />;
+export default async function MessagesPage() {
+  const data = await getDashboardSnapshot();
+
+  return <DashboardPlaceholderPage data={data} page={dashboardPages.messages} />;
 }

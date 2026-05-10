@@ -1,6 +1,9 @@
 import { DashboardPlaceholderPage } from "@/components/page-scaffold";
+import { getDashboardSnapshot } from "@/lib/dashboard-data";
 import { dashboardPages } from "@/lib/page-content";
 
-export default function ConnectPage() {
-  return <DashboardPlaceholderPage page={dashboardPages.connect} />;
+export default async function ConnectPage() {
+  const data = await getDashboardSnapshot();
+
+  return <DashboardPlaceholderPage data={data} page={dashboardPages.connect} />;
 }
