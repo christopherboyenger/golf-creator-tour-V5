@@ -14,8 +14,10 @@ screenshots, and docs are reference material only.
 - Four-tab bottom navigation
 - Placeholder settings drawer, notifications panel, and upgrade sheet
 - Placeholder routes for all required app pages
+- Supabase migration history and typed client helpers
 
-Supabase is not wired in this phase.
+Phase 3 has started with the Supabase schema foundation. The UI still uses
+mock data until the auth and query layers are wired in later phases.
 
 ## Local Setup
 
