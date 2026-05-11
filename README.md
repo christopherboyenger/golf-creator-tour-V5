@@ -17,10 +17,12 @@ screenshots, and docs are reference material only.
 - Supabase migration history and typed client helpers
 - Phase 5 dashboard query layer for profile, leaderboard, challenges,
   notifications, match counts, and app-shell session actions
+- Phase 6 profile page tabs for Overview, Social, and Badges with profile
+  empty states, location editing, social connection, and accepted-match sections
 
-Phase 5 is underway: auth and onboarding are wired to Supabase, and the core
-dashboard shell now reads live Supabase rows with explicit loading, empty, and
-error states where production actions are still being rebuilt.
+Phase 6 is underway: auth and onboarding are wired to Supabase, and the profile
+dashboard now exposes the creator home tabs with explicit loading, empty, and
+success states where production actions are still being rebuilt.
 
 ## Local Setup
 
