@@ -2,6 +2,8 @@ export type MembershipTier = "standard" | "premium" | "elite" | "founder";
 
 export type SocialPlatform = "youtube" | "tiktok" | "instagram";
 
+export type CreatorGender = "M" | "F" | "NB" | null;
+
 export type SocialStat = {
   platform: SocialPlatform;
   handle: string;
@@ -16,8 +18,10 @@ export type Creator = {
   location: string;
   country: string;
   countryCode: string;
+  gender?: CreatorGender;
   tier: MembershipTier;
   rank: string;
+  rankMovement?: number;
   points: number;
   followers: string;
   memberNumber: string;
